@@ -50,12 +50,26 @@ def scrape_pages(link):
                     article['keywords'][keyword] += 1
             articles.append(article)
 
-        
-    monthly_keywords = []
+    #keeps track of all the months found in articles
+    monthly_keywords = {}
+
     for article in articles:
+        month = article['month']
+        keywords = article['keywords']
+        
+        #adds month to list of months if not already present
+        if month not in monthly_keywords:
+            monthly_keywords[month] = {}
+        
+        #goes through keywords dictionary and updates the monthly value
+        for keyword, count in keywords.items():
+            if keyword not in monthly_keywords[month]:
+                monthly_keywords[month][keyword] = 0
+            monthly_keywords[month][keyword] += count
 
 
-            
+
+    print(monthly_keywords)
 
 
 scrape_pages(link_international)
