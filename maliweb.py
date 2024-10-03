@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+from openpyxl import Workbook
 
 link_international = "https://www.maliweb.net/category/international/page/"
 
@@ -8,7 +9,7 @@ link_international = "https://www.maliweb.net/category/international/page/"
 def scrape_pages(link):
     #loop for number of pages to scrape
     articles = []
-    for page in range(1):
+    for page in range(1, 200):
         #concatonated string for to update the page number per page
         url = f'{link}{page}'
         result = requests.get(url)
@@ -34,7 +35,7 @@ def scrape_pages(link):
             #making a dictionary for the article for how many keywords it contains
             article = {'name': article_name,
                        'month': article_month, 
-                       'keywords': {'Russie': 0, 'Russe': 0, 'Poutine': 0, 'Sputnik': 0, 'RT': 0, 'New Eastern Outlook': 0, 'Ria': 0, 'Tass': 0,},
+                       'keywords': {'Russie': 0, 'Russe': 0, 'Poutine': 0, 'Sputnik': 0, 'RT': 0, 'New Eastern Outlook': 0, 'Tass': 0,},
                        }
             
             #scrapes article link
@@ -48,6 +49,8 @@ def scrape_pages(link):
             for keyword in article['keywords']:
                 if keyword in article_contents:
                     article['keywords'][keyword] += 1
+            
+            #adds article dictionary to a list of articles
             articles.append(article)
 
     #keeps track of all the months found in articles
@@ -67,9 +70,31 @@ def scrape_pages(link):
                 monthly_keywords[month][keyword] = 0
             monthly_keywords[month][keyword] += count
 
+    
+    #creating a workbook to export data to an xlsx file
+    wb = Workbook()
+    ws = wb.active
+
+    #row containing all the keywords being searched for
+    ws['B1'] = 'Russie'
+    ws['C1'] = 'Russe'
+    ws['D1'] = 'Poutine'
+    ws['E1'] = 'Sputnik'
+    ws['F1'] = 'RT'
+    ws['G1'] = 'New Eastern Outlook'
+    ws['H1'] = 'Tass'
+
+    #organizes monthly keywords and places them on a seperate row per month
+    for month, results  in monthly_keywords.items():
+        item_list = []
+        print(month)
+        item_list.append(month)
+        for key, value in results.items():
+            item_list.append(value)
+        ws.append(item_list)
+    wb.save('maliweb_data.xlsx')
 
 
-    print(monthly_keywords)
 
 
 scrape_pages(link_international)
