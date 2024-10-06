@@ -92,7 +92,7 @@ def scrape_pages(link):
         for key, value in results.items():
             item_list.append(value)
         ws.append(item_list)
-    wb.save('maliweb_data.xlsx')
+    wb.save('maliweb_data_pg1-200.xlsx')
 
 
 
