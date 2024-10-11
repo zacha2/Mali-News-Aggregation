@@ -9,10 +9,14 @@ link_international = "https://www.maliweb.net/category/international/page/"
 def scrape_pages(link):
     #loop for number of pages to scrape
     articles = []
-    for page in range(1, 200):
+    for page in range(1, 580):
         #concatonated string for to update the page number per page
         url = f'{link}{page}'
-        result = requests.get(url)
+
+        headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
+
+        result = requests.get(url, headers=headers)
         scraper = BeautifulSoup(result.text, 'html.parser')
 
         #prints pagenumber for clarity

@@ -33,7 +33,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/home/zacha/Projects/Python/Mali News Aggregation/.venv"
+set -gx VIRTUAL_ENV "/home/zacha/Python/Mali-News-Aggregation/.venv"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH

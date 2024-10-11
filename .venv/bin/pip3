@@ -1,6 +1,4 @@
-#!/bin/sh
-'''exec' "/home/zacha/Projects/Python/Mali News Aggregation/.venv/bin/python3" "$0" "$@"
-' '''
+#!/home/zacha/Python/Mali-News-Aggregation/.venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
