@@ -34,7 +34,7 @@ def scrape_pages(link):
             article_date = article_container.find('time', class_="entry-date").text
             
             #Splits the article date into monthly segments
-            article_month = article_date.split(' ')[1] +article_date.split(' ')[2]
+            article_month = article_date.split(' ')[1] + article_date.split(' ')[2]
 
             #making a dictionary for the article for how many keywords it contains
             article = {'name': article_name,
