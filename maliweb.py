@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from openpyxl import Workbook
+import time
 
 link_international = "https://www.maliweb.net/category/international/page/"
 
@@ -57,6 +58,9 @@ def scrape_pages(link):
                     article['keywords'][keyword] += 1
             
             articles.append(article)
+            
+            #Makes the script wait 1 second as an aditional measure to make sure it doesn't get flagged
+            time.sleep(1)
 
     #keeps track of all the months found in articles
     monthly_keywords = {}
