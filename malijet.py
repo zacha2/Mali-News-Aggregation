@@ -50,6 +50,7 @@ def scrape_pages(link):
 
                 articles.append(article_dictionary)
 
+                #Makes the script wait 1 second as an aditional measure to make sure it doesn't get flagged
                 time.sleep(1)
 
             
