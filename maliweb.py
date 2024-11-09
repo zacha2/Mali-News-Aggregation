@@ -13,6 +13,10 @@ def scrape_pages(link):
         
         url = f'{link}{page}'
 
+        """used headers to prevent the website from flagging the script
+
+        I had to use a VPN for maliweb because the website had already blacklisted my IP address"""
+
         headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
 
@@ -64,7 +68,12 @@ def scrape_pages(link):
         if month not in monthly_keywords:
             monthly_keywords[month] = {}
         
-        #Loops through dictionary of monthly_keywords and adds keyword counts to monthly_keywords
+        """Loops through dictionary of monthly_keywords and adds keyword counts to monthly_keywords
+
+            if the keyword isn't already in the montly_keywords, it is added
+
+            the value of the keyword is then added to monthly_keywords[month][keyword]
+        """
         for keyword, count in keywords.items():
             if keyword not in monthly_keywords[month]:
                 monthly_keywords[month][keyword] = 0
@@ -98,3 +107,4 @@ def scrape_pages(link):
 
 
 scrape_pages(link_international)
+

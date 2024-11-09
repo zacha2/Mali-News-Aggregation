@@ -3,16 +3,13 @@ from bs4 import BeautifulSoup
 from openpyxl import Workbook
 import time
 
-#base link 
 link_international = "https://malijet.com/actualite_internationale/?page="
 
-#function to scrape site
 def scrape_pages(link):
     articles = []
 
     #for loop for each page to be scraped
     for page in range(1, 276):
-        #url pagenumber refreshes for every iteration of the loop
         url = f'{link}{page}'
 
         headers = {
@@ -21,35 +18,32 @@ def scrape_pages(link):
         result = requests.get(url, headers=headers)
         scraper = BeautifulSoup(result.text, 'html.parser')
 
-        #finds container of the articles and finds every article url in container
+        #page_container has every article per page of articles
         page_container = scraper.find('div', id="v_container")
         article_list = page_container.find_all('div', class_="col-md-6")
 
         print(page)
 
-        #loops through all
+        #This for loop collects basic information for each article
         for article_info in article_list:
-            #gets article date f
             article_date_item = article_info.find('div', class_="bas_articles").find('h5').find_next_sibling('h5').text
             article_date = article_date_item.split(' ')[2] + article_date_item.split(' ')[3]
 
-            #gets url to article
             article_url = article_info.find('h5', class_="card-title").find('a', href=True)['href']
             
-            #creates a dictionary with keywords to be searched for
             article_dictionary = {"url": article_url, "date": article_date, 
                                   "keywords": {'Russie': 0, 'Russe': 0, 'Poutine': 0, 'Sputnik': 0, 'RT': 0, 'New Eastern Outlook': 0, 'Tass': 0,},
                        }
             
-            #scrapes article
+            #Scraper for each individual article
             article_request = requests.get(article_url)
             article_scraper = BeautifulSoup(article_request.text, "html.parser")
 
-            #container with article text
+
             text_container = article_scraper.find('div', id="card_img_jt")
 
+            #Added if statement since the script would occaisonally say there was no text_container
             if text_container.text != None:
-                #checks article for every keyword
                 for keyword in article_dictionary["keywords"]:
                     if keyword in text_container.text:
                         article_dictionary["keywords"][keyword] += 1
@@ -70,11 +64,18 @@ def scrape_pages(link):
             if date not in months:
                 months[date] = {}
 
-            #adds keywords for every month dictionary and then tallys the count
+            """Loops through dictionary of monthly_keywords and adds keyword counts to monthly_keywords
+
+            if the keyword isn't already in the montly_keywords, it is added
+
+            the value of the keyword, count is then added to monthly_keywords[month][keyword]
+        """
             for keyword, count in keywords.items():
+
                 if keyword not in months[date]:
                     months[date][keyword] = 0
                 
+                #updates keyword count for each month
                 months[date][keyword] += count
         
         print(months)
@@ -82,7 +83,6 @@ def scrape_pages(link):
         wb = Workbook()
         ws = wb.active
 
-          #row containing all the keywords being searched for
     ws['B1'] = 'Russie'
     ws['C1'] = 'Russe'
     ws['D1'] = 'Poutine'
@@ -104,3 +104,4 @@ def scrape_pages(link):
 
 
 scrape_pages(link_international)
+
